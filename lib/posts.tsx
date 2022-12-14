@@ -18,9 +18,6 @@ export function getSortedPostsData() {
     // Use gray-matter to pare the post metadata section
     const matterResult: any = matter(fileContents);
 
-    console.log("File contents: ", fileContents);
-    console.log("Matter Result: ", matterResult);
-
     return {
       id,
       ...matterResult.data,
@@ -34,4 +31,35 @@ export function getSortedPostsData() {
       return -1;
     }
   });
+}
+
+export function getAllPostIds() {
+  const fileNames = fs.readdirSync(postsDirectory);
+
+  // Returns:
+  // [
+  //   {
+  //      params: {  id: 'ssg-ssr' }
+  //   },
+  //]
+  return fileNames.map((fileName) => {
+    return {
+      params: {
+        id: fileName.replace(/\.md$/, ""),
+      },
+    };
+  });
+}
+
+export function getPostsData(id: string) {
+  const fullPath = path.join(postsDirectory, `${id}.md`);
+  const fileContents = fs.readFileSync(fullPath, "utf8");
+
+  // Use gray-matter to pare the post metadata section
+  const matterResult: any = matter(fileContents);
+
+  return {
+    id,
+    ...matterResult.data,
+  };
 }
