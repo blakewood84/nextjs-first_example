@@ -9,5 +9,29 @@ export function getSortedPostsData() {
   const fileNames = fs.readdirSync(postsDirectory);
   const allPostsData = fileNames.map((fileName) => {
     // Remove ".md" from file to get id
+    const id = fileName.replace(/\.md$/, "");
+
+    // Read markdown file as string
+    const fullPath = path.join(postsDirectory, fileName);
+    const fileContents = fs.readFileSync(fullPath, "utf8");
+
+    // Use gray-matter to pare the post metadata section
+    const matterResult: any = matter(fileContents);
+
+    console.log("File contents: ", fileContents);
+    console.log("Matter Result: ", matterResult);
+
+    return {
+      id,
+      ...matterResult.data,
+    };
+  });
+
+  return allPostsData.sort((a, b) => {
+    if (a.date < b.date) {
+      return 1;
+    } else {
+      return -1;
+    }
   });
 }
