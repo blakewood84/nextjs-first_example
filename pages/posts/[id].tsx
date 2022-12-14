@@ -1,15 +1,17 @@
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import Layout from "../../components/layout";
-import { getAllPostIds, getPostsData } from "../../lib/posts";
+import { getAllPostIds, getPostData } from "../../lib/posts";
 
 // create a Post component with Layout as a parent
 
-interface PostData {
-  id: string;
-  title: string;
-  date: string;
+function CodeBlock(props: any) {
+  console.log("Props: ", props);
+  return <SyntaxHighlighter language="javascript" children={props.children} />;
 }
 
-export default function Post({ postData }: { postData: PostData }) {
+export default function Post({ postData }: { postData: any }) {
+  console.log("Post Data: ", postData);
   return (
     <Layout>
       {postData.title}
@@ -17,6 +19,11 @@ export default function Post({ postData }: { postData: PostData }) {
       {postData.id}
       <br />
       {postData.date}
+      <br />
+      <ReactMarkdown
+        children={postData.contentHtml}
+        components={{ code: CodeBlock }}
+      />
     </Layout>
   );
 }
@@ -30,12 +37,10 @@ export async function getStaticPaths() {
   };
 }
 
-interface Params {
-  id: string;
-}
-export async function getStaticProps({ params }: { params: Params }) {
-  // Fetch necessary data for the blog post using params.id
-  const postData = getPostsData(params.id);
+export async function getStaticProps({ params }: { params: any }) {
+  // Add the "await" keyword like this:
+  const postData = await getPostData(params.id);
+
   return {
     props: {
       postData,
