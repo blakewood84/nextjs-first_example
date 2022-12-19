@@ -11,7 +11,6 @@ function CodeBlock(props: any) {
 }
 
 export default function Post({ postData }: { postData: any }) {
-  console.log("Post Data: ", postData);
   return (
     <Layout>
       {postData.title}

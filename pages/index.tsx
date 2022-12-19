@@ -1,12 +1,33 @@
 import Head from "next/head";
 import Layout, { siteTitle } from "../components/layout";
 import utilStyles from "../styles/utils.module.css";
+import { useTheme } from "next-themes";
 
 import { getSortedPostsData } from "../lib/posts";
+import { useEffect } from "react";
+
+enum Theme {
+  light,
+  dark,
+}
 
 export default function Home({ allPostsData }: { allPostsData: any }) {
+  const { systemTheme, theme, setTheme } = useTheme();
+  // useEffect(() => {}, []);
+  // console.log("systemTheme", systemTheme);
+  // console.log("theme", theme);
+  // console.log("setTheme", setTheme);
+
   return (
     <Layout home>
+      <input
+        type="checkbox"
+        className="toggle"
+        checked={theme === "dark"}
+        onChange={() => {
+          setTheme(theme === "dark" ? "cupcake" : "dark");
+        }}
+      />
       <Head>
         <title>{siteTitle}</title>
       </Head>
